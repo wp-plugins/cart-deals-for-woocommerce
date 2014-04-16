@@ -3,8 +3,8 @@ Contributors: vark
 Donate link: http://www.varktech.com/wp-e-commerce/cart-deals-for-woocommerce/
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, membership, role, promotion
 Requires at least: 3.3
-Tested up to: 3.8.2
-Stable tag: 1.0
+Tested up to: 3.9
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -139,11 +139,21 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.1 - 2014-04-14 =
+* Fix - warnings on update error
+* Fix - Change to collation syntax on install
+* Fix - shortcode role 'notLoggedIn'
+
 = 1.0 - 2014-04-11 =
 * Initial Public Release
 
 
 == Upgrade Notice ==
+
+= 1.0.1 - 2014-04-14 =
+* Fix - warnings on update error
+* Fix - Change to collation syntax on install
+* Fix - shortcode role 'notLoggedIn'
 
 = 1.0 - 2014-04-11 =
 * Initial Public Release

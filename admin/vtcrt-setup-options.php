@@ -912,14 +912,10 @@ function vtcrt_initialize_options() {
   //****************************
   //  LIFETIME RULE OPTIONS Area
   //****************************    
-  	 if(defined('VTCRT_PRO_DIRNAME')) { 
-       $lifetime_rule_settings_section_msg;
-     } else {
-       $lifetime_rule_settings_section_msg = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . __( '(These options are available in the Pro Version)', 'vtcrt' );
-     }
+
     add_settings_section(
 		'lifetime_rule_settings_section',			// ID used to identify this section and with which to register options
-		__( 'Customer Rule Limit - Options', 'vtcrt' ) . '<span id="vtcrt-lifetime-options-anchor"></span>' . $lifetime_rule_settings_section_msg,// Title to be displayed on the administration page
+		__( 'Customer Rule Limit - Options', 'vtcrt' ) . '<span id="vtcrt-lifetime-options-anchor"></span>' . '<span id="vtcrt-lifetime-options-free-msg">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' . __( '(These options are available in the Pro Version)', 'vtcrt' ) .'</span>',// Title to be displayed on the administration page
 		array(&$this, 'vtcrt_lifetime_rule_options_callback'), // Callback used to render the description of the section
 		'vtcrt_setup_options_page'		// Page on which to add this section of options
 	);

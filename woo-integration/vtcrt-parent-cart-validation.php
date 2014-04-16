@@ -1911,18 +1911,22 @@ echo '$order_info= <pre>'.print_r($order_info, true).'</pre>' ;
       *************************************************   */
       global $vtcrt_rules_set, $vtcrt_cart;
       
-      //mwn0402
+      //mwn04162014
       if (isset($_SESSION['data_chain'])) {
-        $data_chain      = unserialize($_SESSION['data_chain']);
+        $data_chain      = unserialize($_SESSION['data_chain']);          
+        if ($vtcrt_rules_set == '') {        
+          $vtcrt_rules_set = $data_chain[0];
+          $vtcrt_cart      = $data_chain[1];
+        }
       } else {
         $data_chain = array();
+        $data_chain[0] == '';
+        $data_chain[1] == '';
+        $data_chain[2] == '';
+        $data_chain[3] == '';
       }
       
-          
-      if ($vtcrt_rules_set == '') {        
-        $vtcrt_rules_set = $data_chain[0];
-        $vtcrt_cart      = $data_chain[1];
-      }
+
 
       return $data_chain;
    }

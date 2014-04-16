@@ -217,7 +217,12 @@
       
       if ($roles > ' ') {
         $userRole = vtcrt_get_current_user_role();
-        $userRole_name = translate_user_role( $userRole );
+        //mwn04142014
+        if ($userRole =  'notLoggedIn') { 
+          $userRole_name = 'Not logged in (just visiting)'; 
+        } else {
+          $userRole_name = translate_user_role( $userRole );
+        }        
         $roles_array = explode(",", $roles);   //remove comma separator, make list an array
         if (!in_array($userRole_name, $roles_array)) {
           continue;
@@ -630,7 +635,12 @@
             
       if ($group2_roles > ' ') {
         $userRole = vtcrt_get_current_user_role();
-        $userRole_name = translate_user_role( $userRole );
+        //mwn04142014
+        if ($userRole =  'notLoggedIn') { 
+          $userRole_name = 'Not logged in (just visiting)'; 
+        } else {
+          $userRole_name = translate_user_role( $userRole );
+        }        
         $group2_roles_array = explode(",", $group2_roles);   //remove comma separator, make list an array
         if (in_array($userRole_name, $group2_roles_array)) {
           $status['group2_roles'] = 'success';

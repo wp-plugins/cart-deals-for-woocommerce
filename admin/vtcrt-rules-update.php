@@ -102,21 +102,34 @@ action amt condition can be an amt or $$
       if ($upperSelectsDoneSw != 'yes') {       
           $vtcrt_rule->rule_error_message[] = array( 
                 'insert_error_before_selector' => '.top-box',  
-                'error_msg'  => __('Upper Level Filter choices not yet completed', 'vtcrt') );            
+                'error_msg'  => __('Blueprint choices not yet completed', 'vtcrt') );   //mwn20140414       
+          $vtcrt_rule->rule_error_red_fields[] = '#blue-area-title' ;    //mwn20140414   
       } 
       
+      //mwn20140414    begin   ==> added these IDs to rules_ui.php ...
+      if (($vtcrt_rule->pricing_type_select == 'choose') || ($vtcrt_rule->pricing_type_select <= ' ')) {
+          $vtcrt_rule->rule_error_message[] = array( 
+                'insert_error_before_selector' => '.top-box',  
+                'error_msg'  => __('Deal Type choice not yet made', 'vtcrt') );        
+          $vtcrt_rule->rule_error_red_fields[] = '#pricing-type-select-label' ; 
+      }           
+      //mwn20140414    end 
+       
       
       //#RULEtEMPLATE IS NOW A HIDDEN FIELD which carries the rule template SET WITHIN THE JS
       //   in response to the inital dropdowns being selected. 
      $vtcrt_rule->rule_template = $_REQUEST['rule_template_framework']; 
-     if ($vtcrt_rule->rule_template == '0') { 
+    
+     if ($vtcrt_rule->rule_template <= '0') {   //mwn20140414
+          /*  mwn20140414 
           $vtcrt_rule->rule_error_message[] = array( 
                 'insert_error_before_selector' => '.template-area',  
                 'error_msg'  => __('Pricing Deal Template choice is required.', 'vtcrt') );
           $vtcrt_rule->rule_error_red_fields[] = '#deal-type-title' ; 
+          */
           $this->vtcrt_dump_deal_lines_to_rule();
-          $this->vtcrt_update_rules_info();              
-          return; //fatal exit....           
+        //  $this->vtcrt_update_rules_info();   mwn20140414           
+          return; //fatal exit....          
       } else {    
         for($i=0; $i < sizeof($vtcrt_rule_template_framework['option']); $i++) {
           //get template title to make that name available on the Rule
@@ -823,12 +836,24 @@ action amt condition can be an amt or $$
     //**************        
     
     //nuke the browser session variables in this case - allows clean retest ...
-    if(!isset($_SESSION)){
-      session_start();
+/*  mwn20140414 =>code shifted to top of file...
+    if(!isset($_SESSION['session_started'])){
+      session_start();    
       header("Cache-Control: no-cache");
-      header("Pragma: no-cache");
-    }      
-    session_destroy();
+      header("Pragma: no-cache");      
+    }          
+*/
+    // mwn20140414 begin => added inline session_start().  allow potential dup session start, as it's only a Notice, not a warning....
+    //session_start();
+        
+    if (session_id() == "") {
+      session_start();    
+    } 
+    $_SESSION = array();
+    $_SESSION['session_started'] = 'Yes!';  // need to initialize the session prior to destroy 
+    session_destroy();   
+    session_write_close();
+    // mwn20140414 end
     
     
     return;
@@ -1748,6 +1773,11 @@ action amt condition can be an amt or $$
   public function vtcrt_build_deal_edits_framework() {
     global $vtcrt_rule, $vtcrt_template_structures_framework, $vtcrt_deal_edits_framework;
     
+    //mwn20140414
+    if ($vtcrt_rule->rule_template <= '0') {
+        return; 
+    }
+        
     // previously determined template key
     $templateKey = $vtcrt_rule->rule_template; 
     $additional_template_rule_switches = array ( 'discountAppliesWhere' ,  'inPopAllowed' , 'actionPopAllowed'  , 'cumulativeRulePricingAllowed', 'cumulativeSalePricingAllowed', 'replaceSalePricingAllowed', 'cumulativeCouponPricingAllowed') ;

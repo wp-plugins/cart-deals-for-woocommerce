@@ -401,7 +401,8 @@ class VTCRT_Rules_UI{
             
           <div class="blue-line  clear-left">                                  
                <span class="left-column  left-column-less-padding-top3">                              
-                 <label class="hasWizardHelpRight"   for="<?php echo $vtcrt_rule_display_framework['pricing_type_select']['label']['for'];?>"><?php echo $vtcrt_rule_display_framework['pricing_type_select']['label']['title'];?></label>
+                  <?php //mwn20140414 added id ?>
+                 <label id="pricing-type-select-label" class="hasWizardHelpRight"   for="<?php echo $vtcrt_rule_display_framework['pricing_type_select']['label']['for'];?>"><?php echo $vtcrt_rule_display_framework['pricing_type_select']['label']['title'];?></label>
                  <?php vtcrt_show_object_hover_help ('pricing_type_select', 'wizard') ?> 
                </span>
                <span class="blue-dropdown  right-column" id="pricing-type-select-area">   
