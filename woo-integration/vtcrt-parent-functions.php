@@ -70,52 +70,14 @@
               //DON'T USE THIS ANYMORE, BECOMES SELF-REFERENTIAL, AS GET_PRICE() NOW HOOKS THE SINGLE PRODUCT DISCOUNT ...
               //    $vtcrt_cart_item->unit_price     =  get_option( 'woocommerce_tax_display_cart' ) == 'excl' || $woocommerce->customer->is_vat_exempt() ? $_product->get_price_excluding_tax() : $_product->get_price();
 
-                
-                  //v1.0.3 begin - redo for VAT processing...
+           
+                  $vtcrt_cart_item->unit_price =  $cart_item['line_subtotal'] / $cart_item['quantity'];
+                                   
+                  $vtcrt_cart_item->db_unit_price  =  $vtcrt_cart_item->unit_price; 
 
-                  $regular_price = get_post_meta( $product_id, '_regular_price', true );
-                  if ($regular_price > 0) {
-                     $vtcrt_cart_item->db_unit_price_list  =  $regular_price;
-                  } else {
-                     $vtcrt_cart_item->db_unit_price_list  =  get_post_meta( $product_id, '_price', true );
-                  }
-
-                  $vtcrt_cart_item->db_unit_price_special  =  get_post_meta( $product_id, '_sale_price', true );                  
-
-                  if (( get_option( 'woocommerce_prices_include_tax' ) == 'no' )  || 
-                      ( $woocommerce->customer->is_vat_exempt()) ) {
-                     //NO VAT included in price
-                     $vtcrt_cart_item->unit_price =  $cart_item['line_subtotal'] / $cart_item['quantity'];                                                           
-                  } else {
-                     //VAT included in price, and $cart_item pricing has already subtracted out the VAT, so use DB prices (otherwise if other functions called, recursive processing will ensue...)
-                     switch(true) {
-                        case ($vtcrt_cart_item->db_unit_price_special > 0) :  
-                            if ( ($vtcrt_cart_item->db_unit_price_list < 0) ||    //sometimes list price is blank, and user only sets a sale price!!!
-                                 ($vtcrt_cart_item->db_unit_price_special < $vtcrt_cart_item->db_unit_price_list) )  {
-                                //item is on sale, use sale price
-                               $vtcrt_cart_item->unit_price = $vtcrt_cart_item->db_unit_price_special;
-                            } else {
-                               //use regular price
-                               $vtcrt_cart_item->unit_price = $vtcrt_cart_item->db_unit_price_list;
-                            }
-                          break;
-                        default:
-                            $vtcrt_cart_item->unit_price = $vtcrt_cart_item->db_unit_price_list;                            
-                          break;
-                      }
-                     /*
-                     if ( ($vtcrt_cart_item->db_unit_price_special > 0) &&
-                          ($vtcrt_cart_item->db_unit_price_special < $vtcrt_cart_item->db_unit_price_list) ) {
-                       $vtcrt_cart_item->unit_price = $vtcrt_cart_item->db_unit_price_special;
-                     } else {
-                       $vtcrt_cart_item->unit_price = $vtcrt_cart_item->db_unit_price_list;
-                     }
-                     */
-                  }
-                  
-                  $vtcrt_cart_item->db_unit_price  =  $vtcrt_cart_item->unit_price;
-
-                  //v1.0.3 end                  
+                  //how does this work with tax exemption?????????????????
+                  $vtcrt_cart_item->db_unit_price_list     =  get_post_meta( $product_id, '_regular_price', true );
+                  $vtcrt_cart_item->db_unit_price_special  =  get_post_meta( $product_id, '_sale_price', true );               
               }               
 
 
@@ -218,15 +180,7 @@
 
       $vtcrt_cart = new VTCRT_Cart;  
       $vtcrt_cart_item                = new VTCRT_Cart_Item;      
-      
-      // v1.0.3  begin
-      //  straight get_post caused WOO to loose the plot with variable products on 1st time through...
-      //$post = get_post($product_id);
-      if ( ( !isset($post->post_name) ) ||
-           ( $post->post_name <= ' ' ) ) {
-         $post = get_post($product_id);
-      }
-      // v1.0.3  end
+      $post = get_post($product_id);
    
       //change??
       $vtcrt_cart_item->product_id            = $product_id;
@@ -259,7 +213,6 @@
       $short_msg_array = array();
       $full_msg_array = array();
       $msg_already_done = 'no';
-      $show_yousave_one_some_msg;
     
       //auditTrail keyed to rule_id, so foreach is necessary
       foreach ($vtcrt_cart->cart_items[0]->cartAuditTrail as $key => $row) {       
@@ -267,6 +220,7 @@
         //parent product vargroup on sale, individual product variation may not be on sale.
         // send an additional sale msg for the varProd parent group...
         if ($vtcrt_setup_options['show_yousave_one_some_msg'] == 'yes' ) {
+          $show_yousave_one_some_msg;
           if (!$show_yousave_one_some_msg) {
             $rulesetKey = $row['ruleset_occurrence'];
             switch( $vtcrt_rules_set[$rulesetKey]->inPop_varProdID_parentLit) {  
@@ -304,42 +258,12 @@
       //needed for wp-e-commerce!!!!!!!!!!!
       //  if = 'yes', display of 'yousave' becomes 'save FROM' and doesn't change!!!!!!!
 //      $product_variations_sw = vtcrt_test_for_variations($product_id);
-      $product_variations_sw;
-      
     
       if ($vtcrt_cart->cart_items[0]->yousave_total_amt > 0) {
          $list_price                    =   $vtcrt_cart->cart_items[0]->db_unit_price_list;
          $db_unit_price_list_html_woo   =   woocommerce_price($list_price);
          $discount_price                =   $vtcrt_cart->cart_items[0]->discount_price;
          $discount_price_html_woo       =   woocommerce_price($discount_price);
-         
-         //v1.03 begin
-         //from woocommerce/includes/abstracts/abstract-wp-product.php
-         // Check for Price Suffix
-         $price_display_suffix  = get_option( 'woocommerce_price_display_suffix' );
-      	 if ( $price_display_suffix ) {
-            //first get rid of pricing functions which aren't relevant here
-             $find = array(    //these are allowed in suffix, remove
-      				'{price_including_tax}',
-      				'{price_excluding_tax}'
-      			);
-
-            //$replace = '';            
-            $replace = array(
-      				wc_price( $this->get_price_including_tax() ),
-      				wc_price( $this->get_price_excluding_tax() )
-      			);
-            
-      			$price_display_suffix = str_replace( $find, $replace, $price_display_suffix );
-            
-            //then see if suffix is needed
-            if (strpos($discount_price_html_woo, $price_display_suffix) !== false) { //if suffix already in price, do nothing
-              $do_nothing;
-            } else {
-              $discount_price_html_woo = $discount_price_html_woo . ' <small class="woocommerce-price-suffix">' . $price_display_suffix . '</small>';
-            }
-         }
-         //v1.03 end         
    //      $vtcrt_cart->cart_items[0]->product_discount_price_html_woo = 
    //         '<del>' . $db_unit_price_list_html_woo . '</del><ins>' . $discount_price_html_woo . '</ins>'; 
       } else {
@@ -494,15 +418,14 @@
 			'post_status'	  => 'publish',
       'order'         => 'ASC'
 	  ));
-   $product_variations_list = array(); //v1.0.3
    if ($variations)  {    
       $product_variations_list = array();
       foreach ( $variations as $variation) {
         $product_variations_list [] = $variation;             
     	}
-    }/* else  {           v1.0.3
-      $product_variations_list = array();
-    } */
+    } else  {
+      $product_variations_list;
+    }
     
     return ($product_variations_list);
   } 
@@ -2311,34 +2234,6 @@
      return $title;
   }
   add_filter( 'enter_title_here', 'vtcrt_change_default_title' ); 
-
-
-  //***** v1.0.2 begin
-  /* ************************************************
-  **  if BCMATH not installed with PHP by host, this will replace it.
-  *************************************************** */
-  if (!function_exists('bcmul')) {
-    function bcmul($_ro, $_lo, $_scale=0) {
-      return round($_ro*$_lo, $_scale);
-    }
-  }
-  if (!function_exists('bcdiv')) {
-    function bcdiv($_ro, $_lo, $_scale=0) {
-      return round($_ro/$_lo, $_scale);
-    }
-  }
-  //***** v1.0.2 end
- 
-  //v1.0.7 change
-  function vtcrt_debug_options(){ 
-    global $vtcrt_setup_options;
-    if ( ( isset( $vtcrt_setup_options['debugging_mode_on'] )) &&
-         ( $vtcrt_setup_options['debugging_mode_on'] == 'yes' ) ) {  
-      error_reporting(E_ALL);  
-    }  else {
-      error_reporting(E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR); 
-    } 
-  }
 
   /* ************************************************
   **  Disable draggable metabox in the rule custom post type
