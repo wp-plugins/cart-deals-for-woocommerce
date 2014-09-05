@@ -3,8 +3,8 @@ Contributors: vark
 Donate link: http://www.varktech.com/wp-e-commerce/cart-deals-for-woocommerce/
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, membership, role, promotion
 Requires at least: 3.3
-Tested up to: 3.9
-Stable tag: 1.0.1
+Tested up to: 4.0
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -139,6 +139,24 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 == Changelog ==
 
+= 1.0.3 - 2014-06-07 =
+* Fix - general fixes...
+
+= 1.0.2 - 2014-5-20 =
+* Fix - Include price display suffix in Catalog pricing, as needed
+* Enhancement - Pro version check from Free version
+* Fix - if BCMATH not installed with PHP by host, replacement functions
+* Fix - add in missing close comment above function in parent-cart-validation.php
+* Fix - framework, removed (future) upcharge... , fix pricing-type-simple for catalog
+* Fix - framework, pricing-type discount by catalog Option renamed
+* Fix - js for cart simple discount was disallowing discount limiits in error
+* Fix - warnings on apply
+* Fix - cartWidget print option corrected
+* Fix - Get group repeat logic
+* Enhancement - e_notices made switchable, based on 'Test Debugging Mode Turned On' settings switch
+* Enhancement - debugging_mode output to error log
+* Change - cumulativeSalePricing switch default now = 'Yes - Apply Discount to Product Price, even if On Sale' - UI + JS chg
+
 = 1.0.1 - 2014-04-14 =
 * Fix - warnings on update error
 * Fix - Change to collation syntax on install
@@ -149,6 +167,22 @@ Direct support requests can be made here on the support tab, or at the [Support]
 
 
 == Upgrade Notice ==
+
+= 1.0.3 - 2014-5-14 =
+* Fix - Include price display suffix in Catalog pricing, as needed
+
+= 1.0.2 - 2014-5-01 =
+* Fix - if BCMATH not installed with PHP by host, replacement functions
+* Fix - add in missing close comment above function in parent-cart-validation.php
+* Fix - framework, removed (future) upcharge... , fix pricing-type-simple for catalog
+* Fix - framework, pricing-type discount by catalog Option renamed
+* Fix - js for cart simple discount was disallowing discount limiits in error
+* Fix - warnings on apply
+* Fix - cartWidget print option corrected
+* Fix - Get group repeat logic
+* Enhancement - e_notices made switchable, based on 'Test Debugging Mode Turned On' settings switch
+* Enhancement - debugging_mode output to error log
+* Change - cumulativeSalePricing switch default now = 'Yes - Apply Discount to Product Price, even if On Sale' - UI + JS chg
 
 = 1.0.1 - 2014-04-14 =
 * Fix - warnings on update error
