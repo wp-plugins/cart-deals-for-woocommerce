@@ -20,7 +20,7 @@ Power your store to greater success with cart deals and sales promotions! Just a
 *   Role-based Discount Pricing
 *   Product and Variation Discount Pricing
 *   Schedulable
-*   Works with WooCommerce 2.2+
+*   Works with WooCommerce 2.3+
 
 = A Complete Discount Marketing Package =
 
