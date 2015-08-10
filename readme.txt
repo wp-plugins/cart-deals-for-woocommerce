@@ -3,7 +3,7 @@ Contributors: vark
 Donate link: http://www.varktech.com/wp-e-commerce/cart-deals-for-woocommerce/
 Tags: ecommerce, e commerce, e-commerce, commerce, WooCommerce, wordpress ecommerce, store, sales, promotion, advertising, sell, shop, shopping, cart, checkout, configurable, variable, widgets, reports, marketing, deals, price, discount, dynamic pricing, membership, role, promotion
 Requires at least: 3.3
-Tested up to: 4.2.4
+Tested up to: 4.3
 Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -20,7 +20,7 @@ Power your store to greater success with cart deals and sales promotions! Just a
 *   Role-based Discount Pricing
 *   Product and Variation Discount Pricing
 *   Schedulable
-*   Works with WooCommerce 2.3+
+*   Works with WooCommerce 2.4+
 
 = A Complete Discount Marketing Package =
 
